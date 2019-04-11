@@ -1,0 +1,48 @@
+<html>
+
+<head>
+    <title>JSON data</title>
+</head>
+
+<body>
+    <p id="demo"></p>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+    <script>
+        var a = parseFloat(prompt("Enter X Co-ordinate"));
+        var b = parseFloat(prompt("Enter Y Co-ordinate"));
+        var origin =  [a,b];
+        
+        //getJSON is jqeury method which is used to get data from JSON file
+        $.getJSON('coordinates.json', function (data) {
+            sort_input(data, origin);
+        });
+
+        //Calculating distance from all coordinates to origin point
+        function calculateDist(x, y) {
+            x = x.split(",");
+            return Math.sqrt(Math.pow(parseFloat(x[0]) - y[0], 2) + Math.pow(parseFloat(x[1]) - y[1], 2));
+        };
+
+        //Sorting all the Coordinates based on distance value
+        function sort_input(points, origin) {
+            var result = [];
+            points.forEach(function (distance) {
+                result.push([distance, calculateDist(distance['value'], origin)]);
+
+            });
+            result.sort(function (a, b) {
+                return a[1] - b[1];
+            });
+            result.forEach(function (distance, i) {
+                result[i] = distance[0];
+            });
+            document.getElementById("demo").innerHTML = JSON.stringify(result);
+
+        }
+
+
+    </script>
+</body>
+
+</html>
